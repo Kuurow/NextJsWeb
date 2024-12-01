@@ -6,24 +6,15 @@ class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <link rel="icon" href="/favicon.ico" />
-          <meta
-            name="description"
-            content="See pictures from Next.js Conf and the After Party."
-          />
-          <meta property="og:site_name" content="nextjsconf-pics.vercel.app" />
-          <meta
-            property="og:description"
-            content="See pictures from Next.js Conf and the After Party."
-          />
-          <meta property="og:title" content="Next.js Conf 2022 Pictures" />
+          <meta name="description" content="Kuu's website" />
+          <meta property="og:site_name" content="Kuu's website" />
+          <meta property="og:description" content="Kuu's website" />
+          <meta property="og:title" content="Kuu's website" />
           <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="Next.js Conf 2022 Pictures" />
-          <meta
-            name="twitter:description"
-            content="See pictures from Next.js Conf and the After Party."
-          />
+          <meta name="twitter:title" content="Kuu's website" />
+          <meta name="twitter:description" content="Kuu's website" />
         </Head>
-        <body className="bg-black antialiased">
+        <body className="bg-custom bg-no-repeat bg-cover min-h-screen bg-center antialiased">
           <Main />
           <NextScript />
         </body>

@@ -1,8 +1,6 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  future: {
-    hoverOnlyWhenSupported: true,
-  },
+import type { Config } from "tailwindcss";
+
+export default {
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
@@ -18,7 +16,10 @@ module.exports = {
         wide: { raw: "(min-aspect-ratio: 3 / 2)" },
         "taller-than-854": { raw: "(min-height: 854px)" },
       },
+      backgroundImage: {
+        custom: "url('/img/hhholographic.webp')"
+      },
     },
   },
   plugins: [],
-};
+} satisfies Config;
