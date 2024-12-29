@@ -52,3 +52,15 @@ body {
     stroke-width: .4px;
   }
 }
+
+h1, h2 {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+#temp-home-text {
+  grid-column: 2 / 5;
+}
+
+#temp-gal-link {
+  grid-column: 2 / 5;
+}

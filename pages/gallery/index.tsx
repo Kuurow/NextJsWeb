@@ -30,7 +30,7 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
   return (
     <>
       <Head>
-        <title>Kuu's gallery</title>
+        <title>Kuu's website - gallery</title>
         <meta
           property="og:image"
           content=""
@@ -40,7 +40,7 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
           content=""
         />
       </Head>
-      <h1 className="text-center z-10 backdrop-blur-xl w-screen bg-transparent p-5 drop-shadow-sm bottom-1/3 font-bold text-black">The gallery is in WIP</h1>
+      <h1 className="text-center z-10 backdrop-blur-xl w-screen bg-transparent p-5 drop-shadow-sm bottom-1/3 font-bold text-white">The gallery is in WIP</h1>
       <main className="mx-auto max-w-[1960px] p-4">
         <div className="columns-1 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
 
@@ -62,12 +62,12 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
           ))}
         </div>
       </main>
-      <footer className="p-6 text-center text-black/80 sm:p-12">
+      <footer className="p-6 text-center text-white/80 sm:p-12">
         Go back to the main {" "}
         <a
           href="/"
           target=""
-          className="font-semibold hover:text-fuchsia-700"
+          className="font-semibold hover:text-amber-700"
           rel="noreferrer"
         >
           page

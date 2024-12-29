@@ -17,8 +17,12 @@ export default {
         "taller-than-854": { raw: "(min-height: 854px)" },
       },
       backgroundImage: {
-        custom: "url('/img/hhholographic.webp')"
+        custom: "url('/img/dddepth-267.jpg')",
+        main: "url('/img/caddedf8-cfde-468e-9a21-713f0a3bf787.webp')"
       },
+      backgroundColor : {
+        brown: "background-color: rgb(129, 65, 65)"
+      }
     },
   },
   plugins: [],

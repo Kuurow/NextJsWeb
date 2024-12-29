@@ -13,8 +13,9 @@ class MyDocument extends Document {
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content="Kuu's website" />
           <meta name="twitter:description" content="Kuu's website" />
+          <title>Kuu's website</title>
         </Head>
-        <body className="bg-custom bg-no-repeat bg-cover min-h-screen bg-center antialiased">
+        <body className="bg-main min-h-screen bg-center bg-cover antialiased">
           <Main />
           <NextScript />
         </body>
