@@ -24,9 +24,7 @@ export default {
         brown: "background-color: rgb(129, 65, 65)"
       },
       fontFamily: {
-        neuropol: ["Neuropol", ...fontFamily.sans],
-        hybrid_o : ["Hybrid_o", ...fontFamily.sans],
-        hybrid_b : ["Hybrid_b", ...fontFamily.sans],
+        neuropol: ["Neuropol", ...fontFamily.sans]
       },
     },
   },
