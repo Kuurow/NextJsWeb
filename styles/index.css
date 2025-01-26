@@ -20,12 +20,12 @@
 
 @font-face {
   font-family: "Hybrid_o";
-  src: url("../public/hybrid_o.ttf");
+  src: url("../public/Hybrid_o.ttf");
 }
 
 @font-face {
   font-family: "Hybrid_b";
-  src: url("../public/hybrid_b.ttf");
+  src: url("../public/Hybrid_b.ttf");
 }
 
 @media (prefers-color-scheme: dark) {
