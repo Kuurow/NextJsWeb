@@ -4,12 +4,12 @@ export default function Sphere() {
     return (
         <div className="animation-wrapper flex w-full">
             <div className="sphere-animation relative w-[240px] left-[calc(100vw/2-120px)] md:w-[360px] md:left-[calc(100vw/2-180px)] lg:w-[440px] lg:left-[calc(100vw/2-220px)]">
-                <svg className="sphere" viewBox="0 0 440 440" stroke="rgba(238, 238, 238,.35)">
+                <svg className="sphere" viewBox="0 0 440 440" stroke="rgba(231, 140, 76,.35)">
                     <defs>
                         <linearGradient id="sphereGradient" x1="5%" x2="5%" y1="0%" y2="15%">
-                            <stop stopColor="#F9F9F8" offset="0%" />
-                            <stop stopColor="#F2F3F2" offset="50%" />
-                            <stop stopColor="#E5E6E4" offset="100%" />
+                            <stop stopColor="#c37c60" offset="0%" />
+                            <stop stopColor="#a85d40" offset="50%" />
+                            <stop stopColor="#532e20" offset="100%" />
                         </linearGradient>
                     </defs>
                     <path d="M361.604 361.238c-24.407 24.408-51.119 37.27-59.662 28.727-8.542-8.543 4.319-35.255 28.726-59.663 24.408-24.407 51.12-37.269 59.663-28.726 8.542 8.543-4.319 35.255-28.727 59.662z" />

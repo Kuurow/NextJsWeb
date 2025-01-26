@@ -29,7 +29,7 @@ function fitElementToParent(el, padding) {
         for (var i = 0; i < pathLength; i++) {
           aimations.push(anime({
             targets: spherePathEls[i],
-            stroke: {value: ['rgba(185, 101, 225,1)', 'rgba(255,255,255,.25)'], duration: 500},
+            stroke: {value: ['rgb(255, 140, 0,1)', 'rgba(231, 140, 76, 0)'], duration: 500},
             translateX: [2, -4],
             translateY: [2, -4],
             easing: 'easeOutQuad',
