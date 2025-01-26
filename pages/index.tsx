@@ -5,8 +5,11 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="h-screen flex flex-col max-w-screen-xl align-middle xl:mr-auto xl:ml-auto">
+    <main className="flex flex-col align-middle xl:mr-auto xl:ml-auto">
       <HomePage />
+      <Script src="/libs/anime.min.js" />
+      <Script src="/libs/sphereAnime.js" />
     </main>
+    
   );
 }

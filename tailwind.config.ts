@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+const { fontFamily } = require("tailwindcss/defaultTheme");
 
 export default {
   content: [
@@ -17,12 +18,16 @@ export default {
         "taller-than-854": { raw: "(min-height: 854px)" },
       },
       backgroundImage: {
-        custom: "url('/img/dddepth-267.jpg')",
-        main: "url('/img/caddedf8-cfde-468e-9a21-713f0a3bf787.webp')"
+        main: "url('/img/504c2976-91fa-4784-bedc-5f75a13a90e4.webp')"
       },
       backgroundColor : {
         brown: "background-color: rgb(129, 65, 65)"
-      }
+      },
+      fontFamily: {
+        neuropol: ["Neuropol", ...fontFamily.sans],
+        hybrid_o : ["Hybrid_o", ...fontFamily.sans],
+        hybrid_b : ["Hybrid_b", ...fontFamily.sans],
+      },
     },
   },
   plugins: [],

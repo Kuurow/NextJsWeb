@@ -1,7 +1,9 @@
+import Script from "next/script";
+
 export default function Sphere() {
     return (
-        <div className="animation-wrapper">
-            <div className="sphere-animation">
+        <div className="animation-wrapper flex w-full">
+            <div className="sphere-animation relative w-[240px] left-[calc(100vw/2-120px)] md:w-[360px] md:left-[calc(100vw/2-180px)] lg:w-[440px] lg:left-[calc(100vw/2-220px)]">
                 <svg className="sphere" viewBox="0 0 440 440" stroke="rgba(238, 238, 238,.35)">
                     <defs>
                         <linearGradient id="sphereGradient" x1="5%" x2="5%" y1="0%" y2="15%">
@@ -33,6 +35,7 @@ export default function Sphere() {
                     <path d="M109.698 109.332c-24.408 24.407-51.12 37.268-59.663 28.726-8.542-8.543 4.319-35.255 28.727-59.662 24.407-24.408 51.12-37.27 59.662-28.727 8.543 8.543-4.319 35.255-28.726 59.663z" />
                 </svg>
             </div>
+            
         </div>
     )
 }

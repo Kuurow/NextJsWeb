@@ -13,6 +13,21 @@
   --foreground: #171717;
 }
 
+@font-face {
+  font-family: "Neuropol";
+  src: url("../public/Neuropol.otf");
+}
+
+@font-face {
+  font-family: "Hybrid_o";
+  src: url("../public/hybrid_o.ttf");
+}
+
+@font-face {
+  font-family: "Hybrid_b";
+  src: url("../public/hybrid_b.ttf");
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -24,20 +39,6 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
-}
-
-.animation-wrapper {
-  width: 50%;
-  padding-bottom: 50%;
-}
-
-.sphere-animation {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 580px;
-  height: 580px;
-  margin: -290px 0 0 -290px;
 }
 
 .sphere path {

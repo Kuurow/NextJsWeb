@@ -30,7 +30,7 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
   return (
     <>
       <Head>
-        <title>Kuu's website - gallery</title>
+        <title>Kuu's website | Gallery</title>
         <meta
           property="og:image"
           content=""
