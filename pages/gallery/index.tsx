@@ -4,8 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
-import Bridge from "../../components/Icons/Bridge";
-import Logo from "../../components/Icons/Logo";
 import Modal from "../../components/Modal";
 import cloudinary from "../../utils/cloudinary";
 import getBase64ImageUrl from "../../utils/generateBlurPlaceholder";
@@ -40,7 +38,7 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
           content=""
         />
       </Head>
-      <h1 className="text-center z-10 backdrop-blur-xl w-screen bg-transparent p-5 drop-shadow-sm bottom-1/3 font-bold text-white">The gallery is in WIP</h1>
+      <h1 className="text-center z-10 backdrop-blur-xl w-screen bg-transparent p-5 drop-shadow-sm bottom-1/3 font-bold text-black font-neuropol">The gallery is in WIP</h1>
       <main className="mx-auto max-w-[1960px] p-4">
         <div className="columns-1 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
 
@@ -62,12 +60,12 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
           ))}
         </div>
       </main>
-      <footer className="p-6 text-center text-white/80 sm:p-12">
+      <footer className="p-6 text-center text-black/80 sm:p-12 font-neuropol ">
         Go back to the main {" "}
         <a
           href="/"
           target=""
-          className="font-semibold hover:text-amber-700"
+          className="font-semibold hover:text-amber-700 underline-offset-4 underline"
           rel="noreferrer"
         >
           page

@@ -11,6 +11,11 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --bg: #F0DBA5;
+  --text: #151515;
+  --yellow: #EDB74D;
+  --red: #EB6666;
+  --green: #6FB18A;
 }
 
 @font-face {
@@ -20,8 +25,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #ededed;
+    --foreground: #0a0a0a;
   }
 }
 
@@ -29,19 +34,6 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
-}
-
-.sphere path {
-  fill: url(#sphereGradient);
-  stroke-width: 1px;
-  stroke: rgba(255, 255, 255, 0.521);
-  backface-visibility: hidden;
-}
-
-@media (min-width: 500px) {
-  .sphere path {
-    stroke-width: .4px;
-  }
 }
 
 h1, h2 {
@@ -54,4 +46,8 @@ h1, h2 {
 
 #temp-gal-link {
   grid-column: 2 / 5;
+}
+
+.glslCanvas {
+  filter: hue-rotate(140deg);
 }

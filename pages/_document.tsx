@@ -1,3 +1,4 @@
+import BgCanvas from "@/components/BgCanvas";
 import Document, { Head, Html, Main, NextScript } from "next/document";
 
 class MyDocument extends Document {
@@ -13,9 +14,11 @@ class MyDocument extends Document {
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content="Kuu's website" />
           <meta name="twitter:description" content="Kuu's website" />
+          <script type="text/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslCanvas/master/dist/GlslCanvas.js"></script>
         </Head>
         <title>Kuu's website | Homepage</title>
         <body className="bg-main bg-center bg-cover antialiased bg-fixed">
+          <BgCanvas />
           <Main />
           <NextScript />
         </body>
