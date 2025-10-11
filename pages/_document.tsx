@@ -17,7 +17,7 @@ class MyDocument extends Document {
           <script type="text/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslCanvas/master/dist/GlslCanvas.js"></script>
         </Head>
         <title>Kuu's website | Homepage</title>
-        <body className="bg-main bg-center bg-cover antialiased bg-fixed">
+        <body className="bg-white bg-center bg-cover antialiased bg-fixed">
           <BgCanvas />
           <Main />
           <NextScript />
