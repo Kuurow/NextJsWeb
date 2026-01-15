@@ -14,7 +14,7 @@ class MyDocument extends Document {
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content="Kuu's website" />
           <meta name="twitter:description" content="Kuu's website" />
-          <script type="text/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslCanvas/master/dist/GlslCanvas.js"></script>
+          <script type="text/javascript" src="https://raw.githubusercontent.com/patriciogonzalezvivo/glslCanvas/9ed588a7a2d079db1bcc3d8badb8e7de64b75249/dist/GlslCanvas.js"></script>
         </Head>
         <title>Kuu's website | Homepage</title>
         <body className="bg-white bg-center bg-cover antialiased bg-fixed">
