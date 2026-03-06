@@ -6,9 +6,9 @@ import {
   ChevronRightIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { AnimatePresence, motion, MotionConfig } from "framer-motion";
+import { AnimatePresence, motion, MotionConfig, useMotionValue } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 import { variants } from "../utils/animationVariants";
 import downloadPhoto from "../utils/downloadPhoto";
@@ -25,6 +25,17 @@ export default function SharedModal({
   direction,
 }: SharedModalProps) {
   const [loaded, setLoaded] = useState(false);
+  const [zoomed, setZoomed] = useState(false);
+  const dragX = useMotionValue(0);
+  const dragY = useMotionValue(0);
+  const hasDragged = useRef(false);
+
+  useEffect(() => {
+    setLoaded(false);
+    setZoomed(false);
+    dragX.set(0);
+    dragY.set(0);
+  }, [index]);
 
   let filteredImages = images?.filter((img: ImageProps) =>
     range(index - 15, index + 15).includes(img.id),
@@ -32,12 +43,12 @@ export default function SharedModal({
 
   const handlers = useSwipeable({
     onSwipedLeft: () => {
-      if (index < images?.length - 1) {
+      if (!zoomed && index < images?.length - 1) {
         changePhotoId(index + 1);
       }
     },
     onSwipedRight: () => {
-      if (index > 0) {
+      if (!zoomed && index > 0) {
         changePhotoId(index - 1);
       }
     },
@@ -54,12 +65,12 @@ export default function SharedModal({
       }}
     >
       <div
-        className="relative z-50 flex aspect-[3/2] w-full max-w-7xl items-center wide:h-full xl:taller-than-854:h-auto"
+        className="relative z-50 flex w-full max-w-7xl items-center justify-center"
         {...handlers}
       >
         {/* Main image */}
-        <div className="w-full overflow-hidden">
-          <div className="relative flex aspect-[3/2] items-center justify-center">
+        <div className="w-full">
+          <div className="relative flex items-center justify-center">
             <AnimatePresence initial={false} custom={direction}>
               <motion.div
                 key={index}
@@ -70,69 +81,84 @@ export default function SharedModal({
                 exit="exit"
                 className="absolute"
               >
-                <Image
-                  src={`https://res.cloudinary.com/${
-                    process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
-                  }/image/upload/c_scale,${navigation ? "w_1280" : "w_1920"}/${
-                    currentImage.public_id
-                  }.${currentImage.format}`}
-                  width={navigation ? 1280 : 1920}
-                  height={navigation ? 853 : 1280}
-                  priority
-                  alt="Next.js Conf image"
-                  onLoad={() => setLoaded(true)}
-                />
+                <motion.div
+                  drag={zoomed}
+                  dragMomentum={false}
+                  dragElastic={0}
+                  style={{ x: dragX, y: dragY, cursor: loaded ? (zoomed ? "grab" : "zoom-in") : "default" }}
+                  whileDrag={{ cursor: "grabbing" }}
+                  animate={{ scale: zoomed ? 1.5 : 1 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  onDragStart={() => { hasDragged.current = false; }}
+                  onDrag={() => { hasDragged.current = true; }}
+                  onClick={() => {
+                    if (!loaded || hasDragged.current) {
+                      hasDragged.current = false;
+                      return;
+                    }
+                    if (zoomed) {
+                      dragX.set(0);
+                      dragY.set(0);
+                    }
+                    setZoomed((z) => !z);
+                  }}
+                >
+                  <Image
+                    src={`https://res.cloudinary.com/${
+                      process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+                    }/image/upload/c_scale,${navigation ? "w_1280" : "w_1920"}/${
+                      currentImage.public_id
+                    }.${currentImage.format}`}
+                    width={Number(currentImage.width)}
+                    height={Number(currentImage.height)}
+                    priority
+                    alt="Kuu's screenshot"
+                    className="max-h-[85vh] w-auto select-none"
+                    draggable={false}
+                    onDragStart={(e) => e.preventDefault()}
+                    placeholder={currentImage.blurDataUrl ? "blur" : "empty"}
+                    blurDataURL={currentImage.blurDataUrl}
+                    onLoad={() => setLoaded(true)}
+                  />
+                </motion.div>
               </motion.div>
             </AnimatePresence>
+            {!loaded && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="h-10 w-10 animate-spin rounded-full border-4 border-white/20 border-t-white" />
+              </div>
+            )}
           </div>
         </div>
 
         {/* Buttons + bottom nav bar */}
         <div className="absolute inset-0 mx-auto flex max-w-7xl items-center justify-center">
           {/* Buttons */}
+          {/* Top buttons — fixed on mobile, absolute on larger screens */}
           {loaded && (
-            <div className="relative aspect-[3/2] max-h-full w-full">
-              {navigation && (
-                <>
-                  {index > 0 && (
-                    <button
-                      className="absolute left-3 top-[calc(50%-16px)] rounded-full bg-black/50 p-3 text-white/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-white focus:outline-none"
-                      style={{ transform: "translate3d(0, 0, 0)" }}
-                      onClick={() => changePhotoId(index - 1)}
-                    >
-                      <ChevronLeftIcon className="h-6 w-6" />
-                    </button>
+            <>
+              <div className="fixed top-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-1 rounded-full bg-black/50 px-2 py-2 text-white backdrop-blur-lg">
+                <button
+                  onClick={() => closeModal()}
+                  className="rounded-full p-2 text-white/75 transition hover:bg-white/10 hover:text-white"
+                  title="Close"
+                >
+                  {navigation ? (
+                    <XMarkIcon className="h-5 w-5" />
+                  ) : (
+                    <ArrowUturnLeftIcon className="h-5 w-5" />
                   )}
-                  {index + 1 < images.length && (
-                    <button
-                      className="absolute right-3 top-[calc(50%-16px)] rounded-full bg-black/50 p-3 text-white/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-white focus:outline-none"
-                      style={{ transform: "translate3d(0, 0, 0)" }}
-                      onClick={() => changePhotoId(index + 1)}
-                    >
-                      <ChevronRightIcon className="h-6 w-6" />
-                    </button>
-                  )}
-                </>
-              )}
-              <div className="absolute top-0 right-0 flex items-center gap-2 p-3 text-white">
-                {navigation ? (
+                </button>
+                <div className="h-4 w-px bg-white/20" />
+                {navigation && (
                   <a
                     href={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${currentImage.public_id}.${currentImage.format}`}
-                    className="rounded-full bg-black/50 p-2 text-white/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-white"
+                    className="rounded-full p-2 text-white/75 transition hover:bg-white/10 hover:text-white"
                     target="_blank"
                     title="Open fullsize version"
                     rel="noreferrer"
                   >
                     <ArrowTopRightOnSquareIcon className="h-5 w-5" />
-                  </a>
-                ) : (
-                  <a
-                    href={`https://twitter.com/intent/tweet?text=Check%20out%20this%20pic%20from%20Next.js%20Conf!%0A%0Ahttps://nextjsconf-pics.vercel.app/p/${index}`}
-                    className="rounded-full bg-black/50 p-2 text-white/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-white"
-                    target="_blank"
-                    title="Open fullsize version"
-                    rel="noreferrer"
-                  >
                   </a>
                 )}
                 <button
@@ -142,25 +168,36 @@ export default function SharedModal({
                       `${index}.jpg`,
                     )
                   }
-                  className="rounded-full bg-black/50 p-2 text-white/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-white"
+                  className="rounded-full p-2 text-white/75 transition hover:bg-white/10 hover:text-white"
                   title="Download fullsize version"
                 >
                   <ArrowDownTrayIcon className="h-5 w-5" />
                 </button>
               </div>
-              <div className="absolute top-0 left-0 flex items-center gap-2 p-3 text-white">
-                <button
-                  onClick={() => closeModal()}
-                  className="rounded-full bg-black/50 p-2 text-white/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-white"
-                >
-                  {navigation ? (
-                    <XMarkIcon className="h-5 w-5" />
-                  ) : (
-                    <ArrowUturnLeftIcon className="h-5 w-5" />
+              {/* Left/right nav arrows */}
+              {navigation && (
+                <>
+                  {index > 0 && (
+                    <button
+                      className="fixed left-3 top-1/2 z-50 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-white focus:outline-none"
+                      style={{ transform: "translate3d(0, -50%, 0)" }}
+                      onClick={() => changePhotoId(index - 1)}
+                    >
+                      <ChevronLeftIcon className="h-6 w-6" />
+                    </button>
                   )}
-                </button>
-              </div>
-            </div>
+                  {index + 1 < images.length && (
+                    <button
+                      className="fixed right-3 top-1/2 z-50 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-white focus:outline-none"
+                      style={{ transform: "translate3d(0, -50%, 0)" }}
+                      onClick={() => changePhotoId(index + 1)}
+                    >
+                      <ChevronRightIcon className="h-6 w-6" />
+                    </button>
+                  )}
+                </>
+              )}
+            </>
           )}
           {/* Bottom Nav bar */}
           {navigation && (

@@ -38,26 +38,44 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
           content=""
         />
       </Head>
+      {photoId && (
+        <Modal
+          images={images}
+          onClose={() => setLastViewedPhoto(Number(photoId))}
+        />
+      )}
       <h1 className="text-center z-10 backdrop-blur-xl w-screen bg-transparent p-5 drop-shadow-sm bottom-1/3 font-bold text-black font-neuropol">The gallery is in WIP</h1>
       <main className="mx-auto max-w-[1960px] p-4">
-        <div className="columns-1 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
+        <div className="columns-2 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
 
-          {images.map(({ id, public_id, format, blurDataUrl }) => (
-            <Image
-              alt="Kuu's screenshot"
-              className="transform rounded-lg brightness-90 transition will-change-auto group-hover:brightness-110 mb-4"
-              style={{ transform: "translate3d(0, 0, 0)" }}
-              placeholder="blur"
-              blurDataURL={blurDataUrl}
-              src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,w_720/${public_id}.${format}`}
-              width={720}
-              height={480}
-              sizes="(max-width: 640px) 100vw,
-                  (max-width: 1280px) 50vw,
-                  (max-width: 1536px) 33vw,
-                  25vw"
-            />
-          ))}
+          {images.map(({ id, public_id, format, blurDataUrl, width, height }) => {
+            const imgWidth = Number(width);
+            const imgHeight = Number(height);
+            return (
+              <Link
+                key={id}
+                href={`/gallery?photoId=${id}`}
+                ref={id === lastViewedPhoto ? lastViewedPhotoRef : null}
+                shallow
+                className="group block mb-4"
+              >
+                <Image
+                  alt="Kuu's screenshot"
+                  className="transform rounded-lg brightness-90 transition will-change-auto group-hover:brightness-110"
+                  style={{ transform: "translate3d(0, 0, 0)" }}
+                  placeholder={blurDataUrl ? "blur" : "empty"}
+                  blurDataURL={blurDataUrl}
+                  src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,w_720/${public_id}.${format}`}
+                  width={imgWidth}
+                  height={imgHeight}
+                  sizes="(max-width: 640px) 50vw,
+                      (max-width: 1280px) 50vw,
+                      (max-width: 1536px) 33vw,
+                      25vw"
+                />
+              </Link>
+            );
+          })}
         </div>
       </main>
       <footer className="p-6 text-center text-black/80 sm:p-12 font-neuropol ">

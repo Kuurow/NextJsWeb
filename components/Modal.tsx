@@ -1,4 +1,4 @@
-import { Dialog } from "@headlessui/react";
+import { Dialog, DialogBackdrop } from "@headlessui/react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
@@ -23,7 +23,7 @@ export default function Modal({
   const [curIndex, setCurIndex] = useState(index);
 
   function handleClose() {
-    router.push("/", undefined, { shallow: true });
+    router.push("/gallery", undefined, { shallow: true });
     onClose();
   }
 
@@ -36,9 +36,10 @@ export default function Modal({
     setCurIndex(newVal);
     router.push(
       {
+        pathname: "/gallery",
         query: { photoId: newVal },
       },
-      `/p/${newVal}`,
+      undefined,
       { shallow: true },
     );
   }
@@ -63,6 +64,7 @@ export default function Modal({
       initialFocus={overlayRef}
       className="fixed inset-0 z-10 flex items-center justify-center"
     >
+      <DialogBackdrop className="fixed inset-0 bg-black/60 backdrop-blur-md" />
       <SharedModal
         index={curIndex}
         direction={direction}
