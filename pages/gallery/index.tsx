@@ -78,6 +78,12 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
           })}
         </div>
       </main>
+      <Link
+        href="/"
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-black/70 px-4 py-3 text-sm text-white/80 backdrop-blur-lg transition hover:bg-black/90 hover:text-white font-neuropol shadow-lg"
+      >
+        ← Home
+      </Link>
       <footer className="p-6 text-center text-black/80 sm:p-12 font-neuropol ">
         Go back to the main {" "}
         <a

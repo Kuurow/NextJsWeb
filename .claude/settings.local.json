@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm audit)",
+      "Bash(npm audit fix)",
+      "Bash(npm uninstall imagemin imagemin-jpegtran)",
+      "Bash(npm install sharp)"
+    ]
+  }
+}
