@@ -26,6 +26,7 @@ export default function SharedModal({
 }: SharedModalProps) {
   const [loaded, setLoaded] = useState(false);
   const [zoomed, setZoomed] = useState(false);
+  const [zoomScale, setZoomScale] = useState(1.5);
   const dragX = useMotionValue(0);
   const dragY = useMotionValue(0);
   const hasDragged = useRef(false);
@@ -87,7 +88,7 @@ export default function SharedModal({
                   dragElastic={0}
                   style={{ x: dragX, y: dragY, cursor: loaded ? (zoomed ? "grab" : "zoom-in") : "default" }}
                   whileDrag={{ cursor: "grabbing" }}
-                  animate={{ scale: zoomed ? 1.5 : 1 }}
+                  animate={{ scale: zoomed ? zoomScale : 1 }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   onDragStart={() => { hasDragged.current = false; }}
                   onDrag={() => { hasDragged.current = true; }}
@@ -99,6 +100,8 @@ export default function SharedModal({
                     if (zoomed) {
                       dragX.set(0);
                       dragY.set(0);
+                    } else {
+                      setZoomScale(window.innerWidth < 640 ? 2 : 1.5);
                     }
                     setZoomed((z) => !z);
                   }}
