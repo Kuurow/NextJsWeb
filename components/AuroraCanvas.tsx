@@ -1,13 +1,25 @@
 import { useEffect, useRef } from 'react';
 
+// Render at 50 % of logical pixels — plenty sharp for a blurry background,
+// cuts fragment work to ~25 % of a full-res render.
+const RENDER_SCALE = 0.5;
+
+// Target 30 fps — aurora movement is slow, 60 fps buys nothing visible.
+const FRAME_MS = 1000 / 30;
+
 const VS = `
 attribute vec2 a_pos;
 void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
 `;
 
+// Optimisation summary vs original:
+//   • mediump instead of highp  — halves ALU cost on mobile / integrated GPUs
+//   • removed unused GL_OES_standard_derivatives extension
+//   • 5 curtains → 3 (1 warped primary + 2 cheap secondary)
+//   • noise calls per pixel: 11 → 4  (primary: 2 warp + 2 secondary: 1 each)
+//   • removed per-pixel grain snoise call
 const FS = `
-precision highp float;
-#extension GL_OES_standard_derivatives : enable
+precision mediump float;
 uniform vec2  u_res;
 uniform float u_time;
 
@@ -64,52 +76,54 @@ vec2 rot2d(vec2 p, float a){
   return vec2(p.x*c - p.y*s, p.x*s + p.y*c);
 }
 
-float curtain(vec2 p, float freq, float drift, float tilt, float phase, float t){
-  float wx = snoise(vec3(p.x * 0.55, p.y * 0.30, t * 0.06 + phase)) * 0.55;
-  float wy = snoise(vec3(p.x * 0.40 + 3.7, p.y * 0.25, t * 0.05 + phase + 1.3)) * 0.30;
-  vec2  wp = p + vec2(wx, wy);
-  vec2  rp = rot2d(wp, tilt);
-  float band = sin(rp.x * freq + t * drift + phase);
-  float shimmer = sin(rp.x * freq * 2.3 + t * drift * 1.7 + phase + 0.9) * 0.28;
-  float raw = band + shimmer;
-  float b = raw * 0.5 + 0.5;
+/* Primary curtain — 2 noise calls for organic warp */
+float curtainFull(vec2 p, float freq, float drift, float tilt, float phase, float t){
+  float wx = snoise(vec3(p.x*0.55, p.y*0.30, t*0.06+phase)) * 0.55;
+  float wy = snoise(vec3(p.x*0.40+3.7, p.y*0.25, t*0.05+phase+1.3)) * 0.30;
+  vec2  rp = rot2d(p + vec2(wx,wy), tilt);
+  float b  = sin(rp.x*freq + t*drift + phase) * 0.5 + 0.5;
   b = pow(clamp(b, 0.0, 1.0), 2.2);
-  float venv = smoothstep(0.0, 0.28, p.y) * smoothstep(1.0, 0.68, p.y);
-  return b * venv;
+  return b * smoothstep(0.0,0.28,p.y) * smoothstep(1.0,0.68,p.y);
+}
+
+/* Secondary curtain — 1 noise call, no warp */
+float curtainCheap(vec2 p, float freq, float drift, float tilt, float phase, float t){
+  float n  = snoise(vec3(p.x*0.45, p.y*0.25, t*0.055+phase)) * 0.45;
+  vec2  rp = rot2d(p, tilt);
+  float b  = sin((rp.x+n)*freq + t*drift + phase) * 0.5 + 0.5;
+  b = pow(clamp(b, 0.0, 1.0), 2.2);
+  return b * smoothstep(0.0,0.28,p.y) * smoothstep(1.0,0.68,p.y);
 }
 
 vec3 auroraPalette(float v, float layer){
-  vec3 bg      = vec3(0.118, 0.071, 0.047);
-  vec3 ember   = vec3(0.42,  0.26,  0.13);
-  vec3 tan_c   = vec3(0.72,  0.56,  0.35);
-  vec3 sand    = vec3(0.851, 0.769, 0.659);
-  vec3 cream   = vec3(0.961, 0.933, 0.898);
-  vec3 tint = mix(ember, tan_c, clamp(layer, 0.0, 1.0));
+  vec3 bg    = vec3(0.118,0.071,0.047);
+  vec3 ember = vec3(0.42, 0.26, 0.13);
+  vec3 tan_c = vec3(0.72, 0.56, 0.35);
+  vec3 sand  = vec3(0.851,0.769,0.659);
+  vec3 cream = vec3(0.961,0.933,0.898);
+  vec3 tint  = mix(ember, tan_c, clamp(layer,0.0,1.0));
   vec3 c = bg;
-  c = mix(c, tint,  smoothstep(0.05, 0.35, v));
-  c = mix(c, sand,  smoothstep(0.30, 0.62, v));
-  c = mix(c, cream, smoothstep(0.58, 0.88, v));
+  c = mix(c, tint,  smoothstep(0.05,0.35,v));
+  c = mix(c, sand,  smoothstep(0.30,0.62,v));
+  c = mix(c, cream, smoothstep(0.58,0.88,v));
   return c;
 }
 
 void main(){
   vec2 uv = gl_FragCoord.xy / u_res;
   float t  = u_time * 0.28;
-  float c1 = curtain(uv, 5.8,  0.18,  0.00,  0.00, t);
-  float c2 = curtain(uv, 8.3,  0.11,  0.06,  2.40, t);
-  float c3 = curtain(uv, 3.9, -0.09, -0.05,  5.10, t);
-  float c4 = curtain(uv, 11.2, 0.14,  0.09,  8.70, t);
-  float c5 = curtain(uv, 6.7, -0.07, -0.03,  12.3, t);
-  vec3 col = vec3(0.118, 0.071, 0.047);
-  col += auroraPalette(c1, 0.0) * 0.40;
-  col += auroraPalette(c2, 0.3) * 0.30;
-  col += auroraPalette(c3, 0.6) * 0.25;
-  col += auroraPalette(c4, 0.8) * 0.20;
-  col += auroraPalette(c5, 1.0) * 0.18;
-  col = col / (col + 0.55);
-  float grain = snoise(vec3(gl_FragCoord.xy * 1.1, 47.3)) * 0.018;
-  col = clamp(col + grain, 0.0, 1.0);
-  float vig = 1.0 - 0.38 * pow(length(uv - vec2(0.5, 0.48)) * 1.5, 2.0);
+
+  float c1 = curtainFull (uv, 5.8,  0.18,  0.00, 0.00, t);
+  float c2 = curtainCheap(uv, 8.3,  0.11,  0.06, 2.40, t);
+  float c3 = curtainCheap(uv, 3.9, -0.09, -0.05, 5.10, t);
+
+  vec3 col = vec3(0.118,0.071,0.047);
+  col += auroraPalette(c1, 0.0) * 0.45;
+  col += auroraPalette(c2, 0.4) * 0.30;
+  col += auroraPalette(c3, 0.8) * 0.22;
+  col  = col / (col + 0.55);
+
+  float vig = 1.0 - 0.38*pow(length(uv - vec2(0.5,0.48))*1.5, 2.0);
   col *= clamp(vig, 0.0, 1.0);
   gl_FragColor = vec4(col, 1.0);
 }
@@ -136,21 +150,29 @@ export default function AuroraCanvas() {
 
         const gl = (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')) as WebGLRenderingContext | null;
         if (!gl) {
-            console.warn('WebGL not available');
+            console.warn('WebGL not available — aurora disabled');
             return;
         }
 
-        gl.getExtension('OES_standard_derivatives');
-
+        // Debounced resize at reduced resolution
+        let resizeTimer: ReturnType<typeof setTimeout>;
         function resize() {
-            if (!canvas || !gl) return;
-            const dpr = Math.min(devicePixelRatio, 2);
-            canvas.width = window.innerWidth * dpr;
-            canvas.height = window.innerHeight * dpr;
-            gl.viewport(0, 0, canvas.width, canvas.height);
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if (!canvas || !gl) return;
+                const dpr = Math.min(devicePixelRatio, 1) * RENDER_SCALE;
+                canvas.width  = Math.floor(window.innerWidth  * dpr);
+                canvas.height = Math.floor(window.innerHeight * dpr);
+                gl.viewport(0, 0, canvas.width, canvas.height);
+            }, 150);
         }
         window.addEventListener('resize', resize);
-        resize();
+
+        // Immediate first size (no debounce delay on mount)
+        const dpr = Math.min(devicePixelRatio, 1) * RENDER_SCALE;
+        canvas.width  = Math.floor(window.innerWidth  * dpr);
+        canvas.height = Math.floor(window.innerHeight * dpr);
+        gl.viewport(0, 0, canvas.width, canvas.height);
 
         const vs = compileShader(gl, VS, gl.VERTEX_SHADER);
         const fs = compileShader(gl, FS, gl.FRAGMENT_SHADER);
@@ -170,8 +192,8 @@ export default function AuroraCanvas() {
         const buf = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, buf);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-            -1, -1,  1, -1, -1,  1,
-             1, -1,  1,  1, -1,  1,
+            -1,-1,  1,-1, -1, 1,
+             1,-1,  1, 1, -1, 1,
         ]), gl.STATIC_DRAW);
 
         const aPos = gl.getAttribLocation(prog, 'a_pos');
@@ -182,20 +204,24 @@ export default function AuroraCanvas() {
         const uTime = gl.getUniformLocation(prog, 'u_time');
 
         let rafId: number;
+        let lastFrame = 0;
         const t0 = performance.now();
 
-        function frame() {
-            if (!gl || !canvas) return;
-            const t = (performance.now() - t0) * 0.001;
-            gl.uniform2f(uRes, canvas.width, canvas.height);
-            gl.uniform1f(uTime, t);
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
+        function frame(now: number) {
             rafId = requestAnimationFrame(frame);
+            // Skip when tab is hidden or frame budget not elapsed (30 fps cap)
+            if (document.hidden || now - lastFrame < FRAME_MS) return;
+            lastFrame = now;
+            if (!gl || !canvas) return;
+            gl.uniform2f(uRes, canvas.width, canvas.height);
+            gl.uniform1f(uTime, (now - t0) * 0.001);
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
         }
         rafId = requestAnimationFrame(frame);
 
         return () => {
             cancelAnimationFrame(rafId);
+            clearTimeout(resizeTimer);
             window.removeEventListener('resize', resize);
         };
     }, []);
@@ -203,6 +229,7 @@ export default function AuroraCanvas() {
     return (
         <canvas
             ref={canvasRef}
+            style={{ imageRendering: 'auto' }}
             className="fixed inset-0 w-full h-full block -z-10"
         />
     );

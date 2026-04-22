@@ -1,18 +1,24 @@
 import { useEffect, useRef } from 'react';
 
 export default function HeroSection() {
-    const crosshairRef = useRef<HTMLDivElement>(null);
-    const titleBlockRef = useRef<HTMLDivElement>(null);
-    const hlCrossRef    = useRef<HTMLDivElement>(null);
-    const hlTopRef      = useRef<HTMLDivElement>(null);
-    const hlBotRef      = useRef<HTMLDivElement>(null);
-    const bracketRRef   = useRef<HTMLDivElement>(null);
-    const endcapBotRef  = useRef<HTMLDivElement>(null);
-    const endcapCrossRef = useRef<HTMLDivElement>(null);
-    const annIndexRef   = useRef<HTMLSpanElement>(null);
-    const annSeqRef     = useRef<HTMLSpanElement>(null);
-    const annCrossRRef  = useRef<HTMLSpanElement>(null);
+    const crosshairRef    = useRef<HTMLDivElement>(null);
+    const titleBlockRef   = useRef<HTMLDivElement>(null);
+    const hlCrossRef      = useRef<HTMLDivElement>(null);
+    const hlTopRef        = useRef<HTMLDivElement>(null);
+    const hlBotRef        = useRef<HTMLDivElement>(null);
+    const bracketRRef     = useRef<HTMLDivElement>(null);
+    const endcapBotRef    = useRef<HTMLDivElement>(null);
+    const endcapCrossRef  = useRef<HTMLDivElement>(null);
+    const annIndexRef     = useRef<HTMLSpanElement>(null);
+    const annSeqRef       = useRef<HTMLSpanElement>(null);
+    const annCrossRRef    = useRef<HTMLSpanElement>(null);
 
+    // Fade targets — hero block + chrome group + tagline
+    const heroRef         = useRef<HTMLDivElement>(null);
+    const chromeRef       = useRef<HTMLDivElement>(null);
+    const taglineRef      = useRef<HTMLDivElement>(null);
+
+    // ── Chrome layout ──────────────────────────────────────────────────────
     useEffect(() => {
         function layout() {
             const crossEl = crosshairRef.current;
@@ -62,21 +68,42 @@ export default function HeroSection() {
         return () => window.removeEventListener('resize', layout);
     }, []);
 
+    // ── Scroll fade ────────────────────────────────────────────────────────
+    // Fade starts at 60 % of viewport height, completes at 100 %.
+    // Min opacity 0.08 so the hero doesn't vanish entirely.
+    useEffect(() => {
+        function onScroll() {
+            const vh = window.innerHeight;
+            const raw = (window.scrollY - vh * 0.4) / (vh * 0.4);
+            const progress = Math.min(Math.max(raw, 0), 1);
+            const opacity  = String(1 - progress * 0.92);
+
+            if (heroRef.current)    heroRef.current.style.opacity    = opacity;
+            if (chromeRef.current)  chromeRef.current.style.opacity  = opacity;
+            if (taglineRef.current) taglineRef.current.style.opacity = opacity;
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
+
     return (
         <>
-            {/* Dynamic chrome lines */}
-            <div ref={hlCrossRef}    className="ns-hl-cross   md:block hidden" />
-            <div ref={hlTopRef}      className="ns-hl-top     md:block hidden" />
-            <div ref={hlBotRef}      className="ns-hl-bot     md:block hidden" />
-            <div ref={bracketRRef}   className="ns-bracket-r  md:block hidden" />
-            <div ref={endcapBotRef}  className="ns-endcap     md:block hidden" />
-            <div ref={endcapCrossRef} className="ns-endcap    md:block hidden" />
-            <span ref={annIndexRef}  className="ns-chrome-ann md:block hidden">— 01</span>
-            <span ref={annSeqRef}    className="ns-chrome-ann md:block hidden">A / KUUROW</span>
-            <span ref={annCrossRRef} className="ns-chrome-ann md:block hidden">× 0.77</span>
+            {/* Dynamic chrome lines — grouped for unified fade */}
+            <div ref={chromeRef}>
+                <div ref={hlCrossRef}     className="ns-hl-cross   md:block hidden" />
+                <div ref={hlTopRef}       className="ns-hl-top     md:block hidden" />
+                <div ref={hlBotRef}       className="ns-hl-bot     md:block hidden" />
+                <div ref={bracketRRef}    className="ns-bracket-r  md:block hidden" />
+                <div ref={endcapBotRef}   className="ns-endcap     md:block hidden" />
+                <div ref={endcapCrossRef} className="ns-endcap     md:block hidden" />
+                <span ref={annIndexRef}   className="ns-chrome-ann md:block hidden">— 01</span>
+                <span ref={annSeqRef}     className="ns-chrome-ann md:block hidden">A / KUUROW</span>
+                <span ref={annCrossRRef}  className="ns-chrome-ann md:block hidden">× 0.77</span>
+            </div>
 
             {/* Hero */}
-            <div className="ns-hero">
+            <div ref={heroRef} className="ns-hero">
                 <div className="ns-chrome-col">
                     <div ref={crosshairRef} className="ns-crosshair" />
                     <div className="ns-vline" />
@@ -91,7 +118,7 @@ export default function HeroSection() {
             </div>
 
             {/* Tagline strip */}
-            <div className="ns-tagline-strip">
+            <div ref={taglineRef} className="ns-tagline-strip">
                 <span className="ns-tagline-text">Feel the stillness in motion</span>
                 <div className="ns-tagline-divider" />
                 <span className="ns-tagline-coord">48.07°N &nbsp;&nbsp; 0.77°W</span>

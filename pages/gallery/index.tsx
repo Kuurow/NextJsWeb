@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
+import Footer from "../../components/Footer";
 import Modal from "../../components/Modal";
 import cloudinary from "../../utils/cloudinary";
 import getBase64ImageUrl from "../../utils/generateBlurPlaceholder";
@@ -51,6 +52,7 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
             {images.map(({ id, public_id, format, blurDataUrl, width, height }) => {
               const imgWidth = Number(width);
               const imgHeight = Number(height);
+              const seq = String(id + 1).padStart(3, '0');
               return (
                 <Link
                   key={id}
@@ -68,6 +70,11 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
                     height={imgHeight}
                     sizes="(max-width: 640px) 50vw, (max-width: 1280px) 50vw, (max-width: 1536px) 33vw, 25vw"
                   />
+                  <div className="gl-card-footer">
+                    <span>IMG·{seq}</span>
+                    <span className="gl-card-barcode" aria-hidden="true" />
+                    <span>{format.toUpperCase()}</span>
+                  </div>
                 </Link>
               );
             })}
@@ -75,15 +82,7 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
         </main>
       </div>
       <Link href="/" className="gl-back">← Home</Link>
-      <footer className="ns-footer">
-        <div className="ns-footer-inner">
-          <div className="ns-footer-rule" />
-          <div className="ns-footer-bottom">
-            <span className="ns-footer-copy">© 2025 Kuurow — All rights reserved</span>
-            <span className="ns-footer-tag">Gallery / Archive</span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 };
