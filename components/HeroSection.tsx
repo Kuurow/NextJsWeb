@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 export default function HeroSection() {
+    const containerRef    = useRef<HTMLDivElement>(null);
     const crosshairRef    = useRef<HTMLDivElement>(null);
     const titleBlockRef   = useRef<HTMLDivElement>(null);
     const hlCrossRef      = useRef<HTMLDivElement>(null);
@@ -13,47 +14,56 @@ export default function HeroSection() {
     const annSeqRef       = useRef<HTMLSpanElement>(null);
     const annCrossRRef    = useRef<HTMLSpanElement>(null);
 
-    // Fade targets — hero block + chrome group + tagline
+    // Fade targets
     const heroRef         = useRef<HTMLDivElement>(null);
     const chromeRef       = useRef<HTMLDivElement>(null);
     const taglineRef      = useRef<HTMLDivElement>(null);
 
     // ── Chrome layout ──────────────────────────────────────────────────────
+    // All chrome elements are position:absolute inside .ns-hero-wrap, so we
+    // convert getBoundingClientRect() viewport coords to container-relative
+    // coords by subtracting the container's own top offset.
     useEffect(() => {
         function layout() {
-            const crossEl = crosshairRef.current;
-            const titleEl = titleBlockRef.current;
-            if (!crossEl || !titleEl) return;
+            const container = containerRef.current;
+            const crossEl   = crosshairRef.current;
+            const titleEl   = titleBlockRef.current;
+            if (!container || !crossEl || !titleEl) return;
 
+            const origin = container.getBoundingClientRect().top;
             const cr = crossEl.getBoundingClientRect();
             const tr = titleEl.getBoundingClientRect();
-            const crossY = cr.top + cr.height * 0.5;
-            const { top: titleT, bottom: titleB, left: titleL, right: titleR } = tr;
+
+            const crossY = cr.top - origin + cr.height * 0.5;
+            const titleT = tr.top    - origin;
+            const titleB = tr.bottom - origin;
+            const titleL = tr.left;   // horizontal coords need no adjustment
+            const titleR = tr.right;
 
             function s(ref: React.RefObject<HTMLElement | null>, styles: Record<string, string>) {
                 if (ref.current) Object.assign(ref.current.style, styles);
             }
 
-            s(hlCrossRef, { left: '0', top: crossY + 'px', width: (titleR + 56) + 'px' });
-            s(endcapCrossRef, { left: (titleR + 56) + 'px', top: (crossY - 4) + 'px' });
-            s(annCrossRRef, { left: (titleR + 64) + 'px', top: (crossY - 8) + 'px' });
+            s(hlCrossRef,    { left: '0', top: crossY + 'px', width: (titleR + 56) + 'px' });
+            s(endcapCrossRef,{ left: (titleR + 56) + 'px', top: (crossY - 4) + 'px' });
+            s(annCrossRRef,  { left: (titleR + 64) + 'px', top: (crossY - 8) + 'px' });
 
             s(hlTopRef, {
-                left: (titleL - 52) + 'px',
-                top: titleT + 'px',
+                left:  (titleL - 52) + 'px',
+                top:   titleT + 'px',
                 width: (titleR - titleL + 120) + 'px',
             });
             s(annIndexRef, { left: (titleR + 72) + 'px', top: (titleT - 10) + 'px' });
 
-            s(hlBotRef, { left: (titleL - 52) + 'px', top: titleB + 'px', width: '72vw' });
+            s(hlBotRef,   { left: (titleL - 52) + 'px', top: titleB + 'px', width: '72vw' });
             s(endcapBotRef, { left: `calc(${titleL - 52}px + 72vw)`, top: (titleB - 4) + 'px' });
-            s(annSeqRef, { left: `calc(${titleL - 52}px + 72vw - 60px)`, top: (titleB + 6) + 'px' });
+            s(annSeqRef,  { left: `calc(${titleL - 52}px + 72vw - 60px)`, top: (titleB + 6) + 'px' });
 
             const bracketH = titleB - titleT;
             if (bracketRRef.current) {
                 Object.assign(bracketRRef.current.style, {
-                    left: (titleR + 28) + 'px',
-                    top: titleT + 'px',
+                    left:   (titleR + 28) + 'px',
+                    top:    titleT + 'px',
                     height: bracketH + 'px',
                 });
                 bracketRRef.current.style.setProperty('--bracket-h', bracketH + 'px');
@@ -69,12 +79,12 @@ export default function HeroSection() {
     }, []);
 
     // ── Scroll fade ────────────────────────────────────────────────────────
-    // Fade starts at 60 % of viewport height, completes at 100 %.
-    // Min opacity 0.08 so the hero doesn't vanish entirely.
+    // Hero is now in document flow (100vh). Fade starts at 40 % scroll,
+    // completes at 100 % (just as the first section enters the viewport).
     useEffect(() => {
         function onScroll() {
-            const vh = window.innerHeight;
-            const raw = (window.scrollY - vh * 0.4) / (vh * 0.4);
+            const vh       = window.innerHeight;
+            const raw      = (window.scrollY - vh * 0.4) / (vh * 0.4);
             const progress = Math.min(Math.max(raw, 0), 1);
             const opacity  = String(1 - progress * 0.92);
 
@@ -88,9 +98,9 @@ export default function HeroSection() {
     }, []);
 
     return (
-        <>
+        <div ref={containerRef} className="ns-hero-wrap">
             {/* Dynamic chrome lines — grouped for unified fade */}
-            <div ref={chromeRef}>
+            <div ref={chromeRef} className="ns-chrome-group">
                 <div ref={hlCrossRef}     className="ns-hl-cross   md:block hidden" />
                 <div ref={hlTopRef}       className="ns-hl-top     md:block hidden" />
                 <div ref={hlBotRef}       className="ns-hl-bot     md:block hidden" />
@@ -123,6 +133,6 @@ export default function HeroSection() {
                 <div className="ns-tagline-divider" />
                 <span className="ns-tagline-coord">48.07°N &nbsp;&nbsp; 0.77°W</span>
             </div>
-        </>
+        </div>
     );
 }

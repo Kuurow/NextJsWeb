@@ -28,12 +28,9 @@ export default function HomePage() {
             <Nav />
             <HeroSection />
 
-            <div className="ns-scroll-wrap">
-                <div className="ns-hero-spacer" />
-                {SECTIONS.map(s => (
-                    <ContentSection key={s.index} {...s} />
-                ))}
-            </div>
+            {SECTIONS.map(s => (
+                <ContentSection key={s.index} {...s} />
+            ))}
 
             <Footer />
         </>

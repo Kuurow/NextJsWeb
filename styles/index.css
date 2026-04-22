@@ -224,14 +224,26 @@ body {
 }
 
 /* ── Hero ── */
+.ns-hero-wrap {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Chrome group — opacity faded by scroll JS */
+.ns-chrome-group {
+  will-change: opacity;
+}
+
 .ns-hero {
-  position: fixed;
+  position: absolute;
   bottom: 112px;
   left: 64px;
   z-index: 6;
   display: flex;
   gap: 24px;
   align-items: flex-start;
+  will-change: opacity;
 }
 
 .ns-chrome-col {
@@ -314,7 +326,7 @@ body {
 
 /* ── Dynamic chrome lines ── */
 .ns-hl-cross {
-  position: fixed;
+  position: absolute;
   height: 1px;
   background: var(--sand);
   opacity: 0.30;
@@ -323,7 +335,7 @@ body {
 }
 
 .ns-hl-top {
-  position: fixed;
+  position: absolute;
   height: 1px;
   background: repeating-linear-gradient(
     to right,
@@ -336,7 +348,7 @@ body {
 }
 
 .ns-hl-bot {
-  position: fixed;
+  position: absolute;
   height: 1px;
   background: var(--sand);
   opacity: 0.22;
@@ -345,7 +357,7 @@ body {
 }
 
 .ns-bracket-r {
-  position: fixed;
+  position: absolute;
   z-index: 6;
   pointer-events: none;
   width: 12px;
@@ -371,7 +383,7 @@ body {
 }
 
 .ns-endcap {
-  position: fixed;
+  position: absolute;
   z-index: 6;
   pointer-events: none;
   width: 1px;
@@ -381,7 +393,7 @@ body {
 }
 
 .ns-chrome-ann {
-  position: fixed;
+  position: absolute;
   z-index: 6;
   pointer-events: none;
   font-family: 'Space Mono', monospace;
@@ -395,9 +407,10 @@ body {
 
 /* ── Tagline strip ── */
 .ns-tagline-strip {
-  position: fixed;
+  position: absolute;
   bottom: 0; left: 0; right: 0;
   z-index: 6;
+  will-change: opacity;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -461,6 +474,7 @@ body {
   position: relative;
   z-index: 10;
   isolation: isolate;
+  contain: layout style;
   min-height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -468,7 +482,7 @@ body {
   background: rgba(36, 22, 13, 0.62);
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
-  border-top: 1px solid rgba(245,238,229,0.10);
+  /* border-top: 1px solid rgba(245,238,229,0.10); */
 }
 
 /* Fallback for browsers without backdrop-filter support — raise opacity to compensate */
