@@ -17,9 +17,6 @@ export default {
         wide: { raw: "(min-aspect-ratio: 3 / 2)" },
         "taller-than-854": { raw: "(min-height: 854px)" },
       },
-      backgroundImage: {
-        main: "url('/img/504c2976-91fa-4784-bedc-5f75a13a90e4.webp')"
-      },
       backgroundColor: {
         brown: "background-color: rgb(129, 65, 65)"
       },

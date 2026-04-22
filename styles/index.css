@@ -650,6 +650,158 @@ body {
   opacity: 0.40;
 }
 
+/* ── Gallery ── */
+.gl-wrap {
+  min-height: 100vh;
+  padding-top: 120px;
+}
+
+.gl-header {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 52px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gl-header-rule {
+  width: 100%;
+  height: 1px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(217,196,168,0.22) 0px, rgba(217,196,168,0.22) 4px,
+    transparent 4px, transparent 10px
+  );
+  opacity: 0;
+  animation: fadeUp 0.9s ease forwards;
+  animation-delay: 0.05s;
+}
+
+.gl-header-index {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.40em;
+  text-transform: uppercase;
+  color: var(--sand);
+  opacity: 0;
+  animation: fadeUp 0.9s ease forwards;
+  animation-delay: 0.12s;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.gl-header-index::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--sand);
+  opacity: 0.40;
+}
+
+.gl-header-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: clamp(40px, 5.8vw, 78px);
+  line-height: 0.96;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cream);
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fadeUp 0.9s ease forwards;
+  animation-delay: 0.22s;
+}
+
+.gl-header-wip {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(14px, 1.5vw, 20px);
+  letter-spacing: 0.06em;
+  color: var(--sand);
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fadeUp 0.9s ease forwards;
+  animation-delay: 0.34s;
+}
+
+.gl-header-rule-bot {
+  width: 100%;
+  height: 1px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(217,196,168,0.22) 0px, rgba(217,196,168,0.22) 4px,
+    transparent 4px, transparent 10px
+  );
+  opacity: 0;
+  animation: fadeUp 0.9s ease forwards;
+  animation-delay: 0.42s;
+}
+
+.gl-main {
+  max-width: 1960px;
+  margin: 0 auto;
+  padding: 0 52px 120px;
+}
+
+.gl-card {
+  display: block;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(217,196,168,0.10);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.gl-card:hover {
+  border-color: rgba(217,196,168,0.28);
+  box-shadow: 0 0 0 1px rgba(217,196,168,0.10);
+}
+
+.gl-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0.88;
+  transition: opacity 0.35s ease;
+}
+
+.gl-card:hover img { opacity: 1; }
+
+.gl-back {
+  position: fixed;
+  bottom: 84px;
+  right: 52px;
+  z-index: 20;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--sand);
+  opacity: 0.55;
+  transition: opacity 0.35s ease;
+}
+
+.gl-back:hover { opacity: 1; }
+
+@media (max-width: 768px) {
+  .gl-wrap { padding-top: 90px; }
+  .gl-header { padding: 0 28px 48px; }
+  .gl-main { padding: 0 28px 100px; }
+  .gl-back { right: 28px; bottom: 72px; }
+}
+
+@media (max-width: 480px) {
+  .gl-header { padding: 0 20px 36px; }
+  .gl-main { padding: 0 16px 80px; }
+  .gl-back { right: 20px; }
+}
+
 /* ── Responsive: tablet / mobile (≤ 768px) ── */
 @media (max-width: 768px) {
   .ns-nav { padding: 24px 28px 36px; }

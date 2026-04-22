@@ -25,7 +25,7 @@ export default function Nav() {
     return (
         <>
             <nav className="ns-nav">
-                <div className="ns-logo">Kuu &middot; rrow</div>
+                <div className="ns-logo">Kuurow</div>
                 <ul className="ns-nav-links">
                     {NAV_LINKS.map(l => (
                         <li key={l.label}>
@@ -67,7 +67,7 @@ export default function Nav() {
                         ))}
                     </nav>
                     <div className="ns-mob-footer">
-                        <span>Kuu &middot; rrow</span>
+                        <span>Kuurow</span>
                         <span>2026</span>
                     </div>
                 </div>

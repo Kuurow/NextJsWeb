@@ -72,7 +72,7 @@ export default function HeroSection() {
             <div ref={endcapBotRef}  className="ns-endcap     md:block hidden" />
             <div ref={endcapCrossRef} className="ns-endcap    md:block hidden" />
             <span ref={annIndexRef}  className="ns-chrome-ann md:block hidden">— 01</span>
-            <span ref={annSeqRef}    className="ns-chrome-ann md:block hidden">A / KUU</span>
+            <span ref={annSeqRef}    className="ns-chrome-ann md:block hidden">A / KUUROW</span>
             <span ref={annCrossRRef} className="ns-chrome-ann md:block hidden">× 0.77</span>
 
             {/* Hero */}

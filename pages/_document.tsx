@@ -17,7 +17,7 @@ class MyDocument extends Document {
           <meta name="twitter:title" content="Kuu's website" />
           <meta name="twitter:description" content="Kuu's website" />
         </Head>
-        <title>Kuu's website | Homepage</title>
+        <title>Kuurow | Homepage</title>
         <body className="antialiased">
           <Main />
           <NextScript />
