@@ -417,7 +417,7 @@ body {
   padding: 0 52px;
   height: 72px;
   background: linear-gradient(to top, rgba(28,16,8,0.78) 0%, rgba(28,16,8,0) 100%);
-  border-top: 1px solid rgba(217,196,168,0.08);
+  border-top: 1px solid rgba(217,196,168,0.42);
   opacity: 0;
   animation: fadeUp 1s ease forwards;
   animation-delay: 0.7s;
@@ -480,17 +480,9 @@ body {
   grid-template-columns: 1fr 1fr;
   align-items: center;
   background: rgba(36, 22, 13, 0.62);
-  -webkit-backdrop-filter: blur(3px);
-  backdrop-filter: blur(3px);
   /* border-top: 1px solid rgba(245,238,229,0.10); */
 }
 
-/* Fallback for browsers without backdrop-filter support — raise opacity to compensate */
-@supports not (backdrop-filter: blur(1px)) {
-  .ns-content-section {
-    background: rgba(36, 22, 13, 0.85);
-  }
-}
 
 .ns-sec-text {
   padding: clamp(60px, 8vw, 120px) clamp(48px, 6vw, 96px);

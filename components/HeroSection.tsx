@@ -120,16 +120,16 @@ export default function HeroSection() {
                     <div className="ns-htick" />
                 </div>
                 <div ref={titleBlockRef} className="ns-title-block">
-                    <span className="ns-title-line">A</span>
-                    <span className="ns-title-line">Neo</span>
-                    <span className="ns-title-line">Serenity</span>
-                    <span className="ns-title-line">Experience</span>
+                    <span className="ns-title-line">Off</span>
+                    <span className="ns-title-line">Grid</span>
+                    <span className="ns-title-line">By</span>
+                    <span className="ns-title-line">Choice</span>
                 </div>
             </div>
 
             {/* Tagline strip */}
             <div ref={taglineRef} className="ns-tagline-strip">
-                <span className="ns-tagline-text">Feel the stillness in motion</span>
+                <span className="ns-tagline-text">where things slow down for a moment</span>
                 <div className="ns-tagline-divider" />
                 <span className="ns-tagline-coord">48.07°N &nbsp;&nbsp; 0.77°W</span>
             </div>
