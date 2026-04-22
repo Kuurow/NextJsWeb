@@ -1,7 +1,12 @@
 import type { AppProps } from "next/app";
+import AuroraCanvas from "@/components/AuroraCanvas";
 import "../styles/index.css";
- 
+
 export default function MyApp({ Component, pageProps }: AppProps) {
-  
-  return <Component {...pageProps}/>;
+  return (
+    <>
+      <AuroraCanvas />
+      <Component {...pageProps} />
+    </>
+  );
 }
