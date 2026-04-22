@@ -20,11 +20,21 @@ export default {
       backgroundImage: {
         main: "url('/img/504c2976-91fa-4784-bedc-5f75a13a90e4.webp')"
       },
-      backgroundColor : {
+      backgroundColor: {
         brown: "background-color: rgb(129, 65, 65)"
       },
       fontFamily: {
-        neuropol: ["Neuropol", ...fontFamily.sans]
+        neuropol:   ["Neuropol", ...fontFamily.sans],
+        cormorant:  ["Cormorant Garamond", "serif"],
+        "space-mono": ["Space Mono", "monospace"],
+      },
+      colors: {
+        cream:    "#F5EEE5",
+        sand:     "#D9C4A8",
+        warm:     "#B8956A",
+        brown:    "#7A5C3E",
+        espresso: "#3D2B1F",
+        ink:      "#2A1A10",
       },
     },
   },
