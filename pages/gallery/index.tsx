@@ -8,8 +8,8 @@ import Footer from "../../components/Footer";
 import Modal from "../../components/Modal";
 import cloudinary from "../../utils/cloudinary";
 import getBase64ImageUrl from "../../utils/generateBlurPlaceholder";
-import type { ImageProps } from "../../utils/types";
-import { useLastViewedPhoto } from "../../utils/useLastViewedPhoto";
+import type { ImageProps } from "@/utils/types";
+import { useLastViewedPhoto } from "@/utils/useLastViewedPhoto";
 
 const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
   const router = useRouter();
@@ -81,7 +81,6 @@ const Home: NextPage = ({ images }: { images: ImageProps[] }) => {
           </div>
         </main>
       </div>
-      <Link href="/" className="gl-back">← Home</Link>
       <Footer />
     </>
   );

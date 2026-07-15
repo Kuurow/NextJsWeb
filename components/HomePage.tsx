@@ -1,4 +1,3 @@
-import Nav from './Nav';
 import HeroSection from './HeroSection';
 import ContentSection from './ContentSection';
 import Footer from './Footer';
@@ -25,7 +24,6 @@ const SECTIONS = [
 export default function HomePage() {
     return (
         <>
-            <Nav />
             <HeroSection />
 
             {SECTIONS.map(s => (

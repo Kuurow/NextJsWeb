@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 const NAV_LINKS = [
     { label: 'Gallery', href: '/gallery' },
@@ -25,7 +26,7 @@ export default function Nav() {
     return (
         <>
             <nav className="ns-nav">
-                <div className="ns-logo">Kuurow</div>
+                <Link href="/" className="ns-logo">Kuurow</Link>
                 <ul className="ns-nav-links">
                     {NAV_LINKS.map(l => (
                         <li key={l.label}>

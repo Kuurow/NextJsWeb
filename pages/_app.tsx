@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 import AuroraCanvas from "@/components/AuroraCanvas";
+import Nav from "@/components/Nav";
 import "../styles/index.css";
 
 function ScrollToTop() {
@@ -31,6 +32,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <AuroraCanvas />
+      <Nav />
       <Component {...pageProps} />
       <ScrollToTop />
     </>
