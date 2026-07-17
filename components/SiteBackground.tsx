@@ -20,7 +20,9 @@ export default function SiteBackground() {
 
         function draw() {
             if (!canvas || !ctx || !offCtx) return;
-            const dpr = window.devicePixelRatio || 1;
+            // Cap the grain resolution — it is random noise, so a lower density is
+            // visually identical but far lighter on high-DPI mobile screens.
+            const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
             const w = Math.floor(window.innerWidth * dpr);
             const h = Math.floor(window.innerHeight * dpr);
             canvas.width = w;

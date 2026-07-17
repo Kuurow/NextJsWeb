@@ -293,12 +293,9 @@ h1, h2 {
   position: fixed;
   inset: 0;
   z-index: 45;
-  background: rgba(10, 9, 8, 0.96);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  background: rgba(8, 7, 6, 0.97);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease;
@@ -306,11 +303,26 @@ h1, h2 {
 
 .ns-mob-overlay.open { opacity: 1; pointer-events: all; }
 
+/* HUD corner brackets */
+.ns-mob-overlay::before,
+.ns-mob-overlay::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--accent);
+  opacity: 0.7;
+  pointer-events: none;
+}
+.ns-mob-overlay::before { top: 16px;    left: 16px;  border-width: 1px 0 0 1px; }
+.ns-mob-overlay::after  { bottom: 16px; right: 16px; border-width: 0 1px 1px 0; }
+
 .ns-mob-inner {
-  padding: 80px 40px 40px;
+  position: relative;
+  height: 100%;
+  padding: 24px 24px 30px;
   display: flex;
   flex-direction: column;
-  gap: 48px;
 }
 
 .ns-mob-top-bar {
@@ -319,9 +331,18 @@ h1, h2 {
   align-items: center;
 }
 
+.ns-mob-brand {
+  font-family: var(--font-archivo);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
 .ns-mob-close {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   background: none;
   border: 1px solid var(--line);
   border-radius: 50%;
@@ -347,6 +368,7 @@ h1, h2 {
 .ns-mob-close span:nth-child(2) { transform: rotate(-45deg); }
 
 .ns-mob-index {
+  margin-top: 18px;
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.30em;
@@ -355,29 +377,63 @@ h1, h2 {
 }
 
 .ns-mob-links {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  align-items: flex-start;
   padding: 0;
   background: none;
   width: 100%;
 }
 
 .ns-mob-link {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
   font-family: var(--font-head);
   font-weight: 300;
-  font-size: clamp(38px, 11vw, 64px);
-  letter-spacing: 0.02em;
+  font-size: clamp(40px, 13vw, 68px);
+  letter-spacing: 0.01em;
   text-decoration: none;
   color: var(--ink);
-  line-height: 1.2;
+  line-height: 1.12;
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(-16px);
   transition:
     color 0.25s ease,
-    opacity 0.45s ease calc(var(--i, 0) * 0.07s + 0.1s),
-    transform 0.45s ease calc(var(--i, 0) * 0.07s + 0.1s);
+    opacity 0.45s ease calc(var(--i, 0) * 0.07s + 0.15s),
+    transform 0.45s ease calc(var(--i, 0) * 0.07s + 0.15s);
+}
+
+.ns-mob-link-num {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  align-self: flex-start;
+  padding-top: 8px;
+}
+
+/* Decorative vertical tick under each number */
+.ns-mob-link-num::after {
+  content: "";
+  width: 1px;
+  height: 22px;
+  background: var(--accent);
+  opacity: 0.45;
+  transition: height 0.3s ease, opacity 0.3s ease;
+}
+
+.ns-mob-link:hover .ns-mob-link-num::after {
+  height: 30px;
+  opacity: 0.85;
 }
 
 .ns-mob-overlay.open .ns-mob-link { opacity: 1; transform: translateY(0); }
@@ -392,7 +448,7 @@ h1, h2 {
   text-transform: uppercase;
   color: var(--muted);
   border-top: 1px solid var(--line);
-  padding-top: 24px;
+  padding-top: 20px;
 }
 
 /* ── Hero ── */
@@ -794,26 +850,31 @@ h1, h2 {
 /* ── Scroll-to-top ── */
 .scroll-top {
   position: fixed;
-  bottom: 84px;
-  right: 52px;
+  bottom: 40px;
+  right: 40px;
   z-index: 20;
-  padding: 13px 22px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  text-decoration: none;
   color: var(--ink);
   cursor: pointer;
 
-  background: rgba(10, 9, 8, 0.72);
+  background: rgba(10, 9, 8, 0.5);
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   border: 1px solid var(--line);
 
-  opacity: 0.75;
+  opacity: 0.7;
   transition: opacity 0.35s ease, border-color 0.35s ease;
+}
+
+.scroll-top svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
 }
 
 .scroll-top::before,
@@ -867,6 +928,40 @@ h1, h2 {
   .gl-wrap { padding-top: 90px; }
   .gl-header { padding: 0 28px 48px; }
   .gl-main { padding: 0 28px 100px; }
+
+  /* ── Mobile performance: stop continuous GPU work ── */
+  /* Freeze the glow drift so the blurred + blended layers composite once */
+  .glow::before,
+  .glow::after,
+  .glow-secondary::before { animation: none; }
+
+  /* Drop backdrop-filter (the main scroll-jank cost); compensate with opacity */
+  .block,
+  .site-footer {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: rgba(10, 9, 8, 0.6);
+  }
+
+  .site-nav.scrolled {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: rgba(10, 9, 8, 0.85);
+  }
+
+  .ns-mob-overlay {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Users who ask for less motion get a still backdrop */
+@media (prefers-reduced-motion: reduce) {
+  .glow::before,
+  .glow::after,
+  .glow-secondary::before,
+  .scroll-hint svg,
+  .status-dot { animation: none; }
 }
 
 @media (max-width: 480px) {

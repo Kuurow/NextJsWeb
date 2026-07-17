@@ -70,12 +70,13 @@ export default function Nav() {
             <div className={`ns-mob-overlay${open ? ' open' : ''}`}>
                 <div className="ns-mob-inner">
                     <div className="ns-mob-top-bar">
-                        <div className="ns-mob-index">Menu</div>
+                        <span className="ns-mob-brand">Kuurow</span>
                         <button className="ns-mob-close" onClick={close} aria-label="Close menu">
                             <span />
                             <span />
                         </button>
                     </div>
+                    <span className="ns-mob-index">Menu &mdash; Navigation</span>
                     <nav className="ns-mob-links">
                         {NAV_LINKS.map((l, i) => (
                             <a
@@ -85,13 +86,14 @@ export default function Nav() {
                                 style={{ '--i': i } as React.CSSProperties}
                                 onClick={close}
                             >
-                                {l.label}
+                                <span className="ns-mob-link-num">{String(i + 1).padStart(2, '0')}</span>
+                                <span className="ns-mob-link-label">{l.label}</span>
                             </a>
                         ))}
                     </nav>
                     <div className="ns-mob-footer">
-                        <span>Kuurow</span>
-                        <span>2026</span>
+                        <span>&copy; 2026 Kuurow</span>
+                        <span>&mdash; // &mdash;</span>
                     </div>
                 </div>
             </div>

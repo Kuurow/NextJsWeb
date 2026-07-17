@@ -23,7 +23,9 @@ function ScrollToTop() {
       className="scroll-top"
       aria-label="Scroll to top"
     >
-      ↑ Top
+      <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
     </button>
   );
 }
