@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const NAV_LINKS = [
     { label: 'Gallery', href: '/gallery' },
@@ -8,7 +9,13 @@ const NAV_LINKS = [
 ];
 
 export default function Nav() {
+    const router = useRouter();
+    // The floating/reveal behaviour only makes sense on the home page, which has a
+    // full-height hero. Every other page keeps the nav in its materialised state.
+    const isHome = router.pathname === '/';
+
     const [open, setOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(!isHome);
 
     function toggle() {
         setOpen(prev => !prev);
@@ -23,14 +30,29 @@ export default function Nav() {
         return () => { document.body.style.overflow = ''; };
     }, [open]);
 
+    // On the home page, reveal the brand + shadow only once scrolled past most of
+    // the hero. Elsewhere the nav stays materialised.
+    useEffect(() => {
+        if (!isHome) {
+            setScrolled(true);
+            return;
+        }
+        function onScroll() {
+            setScrolled(window.scrollY > window.innerHeight * 0.8);
+        }
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, [isHome]);
+
     return (
         <>
-            <nav className="ns-nav">
-                <Link href="/" className="ns-logo">Kuurow</Link>
-                <ul className="ns-nav-links">
+            <nav className={`site-nav${scrolled ? ' scrolled' : ''}`}>
+                <Link href="/" className="brand">Kuurow</Link>
+                <ul>
                     {NAV_LINKS.map(l => (
                         <li key={l.label}>
-                            <a href={l.href}>{l.label}</a>
+                            <a href={l.href} className="nav-link">{l.label}</a>
                         </li>
                     ))}
                 </ul>
