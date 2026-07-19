@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Logo from './Logo';
 
 export default function HeroSection() {
     const [clock, setClock] = useState('');
@@ -27,31 +28,7 @@ export default function HeroSection() {
 
             <div className="hero-content">
                 <div className="hero-logo">
-                    {/* Temporary geometric K monogram — placeholder until the real logo lands */}
-                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M34 22 V78"
-                            stroke="var(--ink)"
-                            strokeWidth="9"
-                            strokeLinecap="round"
-                            opacity="0.9"
-                        />
-                        <path
-                            d="M34 50 L66 22"
-                            stroke="var(--ink)"
-                            strokeWidth="9"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            opacity="0.9"
-                        />
-                        <path
-                            d="M34 50 L66 78"
-                            stroke="var(--accent)"
-                            strokeWidth="9"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                    </svg>
+                    <Logo />
                 </div>
             </div>
 

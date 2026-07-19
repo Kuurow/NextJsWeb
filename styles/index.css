@@ -907,6 +907,60 @@ h1, h2 {
   border-color: rgba(198, 90, 46, 0.6);
 }
 
+/* ── Preloader / intro splash ── */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.preloader.leaving { opacity: 0; }
+
+/* Already seen this session (set by the anti-flash script in _document) — no splash */
+.intro-seen .preloader { display: none; }
+
+.preloader-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.preloader-logo svg {
+  width: 60px;
+  height: 60px;
+  display: block;
+}
+
+.preloader-bar {
+  position: relative;
+  width: 140px;
+  height: 1px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.preloader-bar-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0;
+  background: var(--accent);
+  transition: width 0.1s linear;
+}
+
+.preloader-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.30em;
+  color: var(--muted);
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .side-line, .side-label { display: none; }

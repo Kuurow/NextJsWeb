@@ -5,6 +5,13 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          {/* Anti-flash: hide the intro splash before first paint if already seen this session */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html:
+                "try{if(sessionStorage.getItem('kuurow:seen-intro'))document.documentElement.classList.add('intro-seen')}catch(e){}",
+            }}
+          />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400;500&family=Archivo+Expanded:wght@400;600;700&display=swap" rel="stylesheet" />

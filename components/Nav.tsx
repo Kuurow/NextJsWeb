@@ -52,7 +52,11 @@ export default function Nav() {
                 <ul>
                     {NAV_LINKS.map(l => (
                         <li key={l.label}>
-                            <a href={l.href} className="nav-link">{l.label}</a>
+                            {l.href.startsWith('/') ? (
+                                <Link href={l.href} className="nav-link">{l.label}</Link>
+                            ) : (
+                                <a href={l.href} className="nav-link">{l.label}</a>
+                            )}
                         </li>
                     ))}
                 </ul>
@@ -78,18 +82,36 @@ export default function Nav() {
                     </div>
                     <span className="ns-mob-index">Menu &mdash; Navigation</span>
                     <nav className="ns-mob-links">
-                        {NAV_LINKS.map((l, i) => (
-                            <a
-                                key={l.label}
-                                href={l.href}
-                                className="ns-mob-link"
-                                style={{ '--i': i } as React.CSSProperties}
-                                onClick={close}
-                            >
-                                <span className="ns-mob-link-num">{String(i + 1).padStart(2, '0')}</span>
-                                <span className="ns-mob-link-label">{l.label}</span>
-                            </a>
-                        ))}
+                        {NAV_LINKS.map((l, i) => {
+                            const style = { '--i': i } as React.CSSProperties;
+                            const inner = (
+                                <>
+                                    <span className="ns-mob-link-num">{String(i + 1).padStart(2, '0')}</span>
+                                    <span className="ns-mob-link-label">{l.label}</span>
+                                </>
+                            );
+                            return l.href.startsWith('/') ? (
+                                <Link
+                                    key={l.label}
+                                    href={l.href}
+                                    className="ns-mob-link"
+                                    style={style}
+                                    onClick={close}
+                                >
+                                    {inner}
+                                </Link>
+                            ) : (
+                                <a
+                                    key={l.label}
+                                    href={l.href}
+                                    className="ns-mob-link"
+                                    style={style}
+                                    onClick={close}
+                                >
+                                    {inner}
+                                </a>
+                            );
+                        })}
                     </nav>
                     <div className="ns-mob-footer">
                         <span>&copy; 2026 Kuurow</span>
