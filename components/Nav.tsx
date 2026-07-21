@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Logo from './Logo';
 
 const NAV_LINKS = [
     { label: 'Gallery', href: '/gallery' },
@@ -48,7 +49,7 @@ export default function Nav() {
     return (
         <>
             <nav className={`site-nav${scrolled ? ' scrolled' : ''}`}>
-                <Link href="/" className="brand">Kuurow</Link>
+                <Link href="/" className="brand" aria-label="Kuurow — home"><Logo /></Link>
                 <ul>
                     {NAV_LINKS.map(l => (
                         <li key={l.label}>
@@ -74,7 +75,9 @@ export default function Nav() {
             <div className={`ns-mob-overlay${open ? ' open' : ''}`}>
                 <div className="ns-mob-inner">
                     <div className="ns-mob-top-bar">
-                        <span className="ns-mob-brand">Kuurow</span>
+                        <Link href="/" className="ns-mob-brand" onClick={close} aria-label="Kuurow — home">
+                            <Logo />
+                        </Link>
                         <button className="ns-mob-close" onClick={close} aria-label="Close menu">
                             <span />
                             <span />

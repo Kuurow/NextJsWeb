@@ -21,7 +21,6 @@ export default {
         brown: "background-color: rgb(129, 65, 65)"
       },
       fontFamily: {
-        neuropol:   ["Neuropol", ...fontFamily.sans],
         head:       ["Space Grotesk", ...fontFamily.sans],
         archivo:    ["Archivo Expanded", ...fontFamily.sans],
         mono:       ["JetBrains Mono", "ui-monospace", "monospace"],

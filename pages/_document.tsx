@@ -15,7 +15,9 @@ class MyDocument extends Document {
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400;500&family=Archivo+Expanded:wght@400;600;700&display=swap" rel="stylesheet" />
-          <link rel="icon" href="./icon.ico" />
+          <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+          <link rel="icon" type="image/png" href="/favicon.png" />
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
           <meta name="description" content="Kuu's website" />
           <meta property="og:site_name" content="Kuu's website" />
           <meta property="og:description" content="Kuu's website" />
