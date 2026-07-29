@@ -7,6 +7,26 @@ import { useEffect, useRef } from 'react';
  */
 export default function SiteBackground() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const bgRef = useRef<HTMLDivElement>(null);
+
+    // Freeze the glow drift once the user has scrolled past the first viewport —
+    // the animated blobs are then mostly covered, so pausing them costs the GPU
+    // nothing while scrolling through content.
+    useEffect(() => {
+        const bg = bgRef.current;
+        if (!bg) return;
+        let paused = false;
+        function onScroll() {
+            const should = window.scrollY > window.innerHeight * 0.9;
+            if (should !== paused) {
+                paused = should;
+                bg!.classList.toggle('glow-paused', paused);
+            }
+        }
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -64,7 +84,7 @@ export default function SiteBackground() {
 
     return (
         <>
-            <div className="site-bg" aria-hidden="true">
+            <div className="site-bg" aria-hidden="true" ref={bgRef}>
                 <div className="bg-base" />
                 <div className="glow" />
                 <div className="glow-secondary" />
