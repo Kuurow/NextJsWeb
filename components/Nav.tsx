@@ -5,8 +5,6 @@ import Logo from './Logo';
 
 const NAV_LINKS = [
     { label: 'Gallery', href: '/gallery' },
-    { label: 'About', href: '#about' },
-    { label: 'Contact', href: '#contact' },
 ];
 
 export default function Nav() {
