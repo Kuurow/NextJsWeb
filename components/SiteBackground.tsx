@@ -1,17 +1,25 @@
 import { useEffect, useRef } from 'react';
 
 /**
- * Fixed full-page backdrop: animated CSS glow + radial horizon + a static
- * film-grain noise canvas, plus the persistent HUD frame (side lines, labels,
- * corner crosshairs). Replaces the former WebGL AuroraCanvas.
+ * Fixed full-page backdrop: animated CSS glow (pure radial gradients, no
+ * filter:blur) + a linear-vignette horizon, plus the persistent HUD frame
+ * (side lines, labels, corner crosshairs).
  */
 export default function SiteBackground() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
     const bgRef = useRef<HTMLDivElement>(null);
 
-    // Freeze the glow drift once the user has scrolled past the first viewport —
-    // the animated blobs are then mostly covered, so pausing them costs the GPU
-    // nothing while scrolling through content.
+    // Perf-testing toggles via URL query:
+    //   ?static → freeze the glow drift   ?nobg → remove the animated background
+    useEffect(() => {
+        const p = new URLSearchParams(window.location.search);
+        const html = document.documentElement;
+        if (p.has('static')) html.classList.add('bg-static');
+        if (p.has('nobg')) html.classList.add('bg-off');
+        return () => html.classList.remove('bg-static', 'bg-off');
+    }, []);
+
+    // Freeze the glow drift once scrolled past the first viewport — the blobs are
+    // then covered, so pausing costs the GPU nothing while reading content.
     useEffect(() => {
         const bg = bgRef.current;
         if (!bg) return;
@@ -28,60 +36,6 @@ export default function SiteBackground() {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-
-        const off = document.createElement('canvas');
-        const offCtx = off.getContext('2d');
-        if (!offCtx) return;
-
-        function draw() {
-            if (!canvas || !ctx || !offCtx) return;
-            // Cap the grain resolution — it is random noise, so a lower density is
-            // visually identical but far lighter on high-DPI mobile screens.
-            const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-            const w = Math.floor(window.innerWidth * dpr);
-            const h = Math.floor(window.innerHeight * dpr);
-            canvas.width = w;
-            canvas.height = h;
-            canvas.style.width = window.innerWidth + 'px';
-            canvas.style.height = window.innerHeight + 'px';
-            off.width = w;
-            off.height = h;
-
-            const imageData = offCtx.createImageData(w, h);
-            const buffer = imageData.data;
-            for (let i = 0; i < buffer.length; i += 4) {
-                const value = Math.random() * 255;
-                buffer[i] = value;
-                buffer[i + 1] = value;
-                buffer[i + 2] = value;
-                buffer[i + 3] = 255;
-            }
-            offCtx.putImageData(imageData, 0, 0);
-            ctx.imageSmoothingEnabled = false;
-            ctx.clearRect(0, 0, w, h);
-            ctx.drawImage(off, 0, 0, w, h);
-        }
-
-        // Redraw grain only on resize — it is static otherwise.
-        let resizeTimer: ReturnType<typeof setTimeout>;
-        function onResize() {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(draw, 150);
-        }
-
-        draw();
-        window.addEventListener('resize', onResize);
-        return () => {
-            clearTimeout(resizeTimer);
-            window.removeEventListener('resize', onResize);
-        };
-    }, []);
-
     return (
         <>
             <div className="site-bg" aria-hidden="true" ref={bgRef}>
@@ -89,7 +43,6 @@ export default function SiteBackground() {
                 <div className="glow" />
                 <div className="glow-secondary" />
                 <div className="horizon" />
-                <canvas id="noiseCanvas" ref={canvasRef} />
             </div>
 
             <div className="tech-deco" aria-hidden="true">

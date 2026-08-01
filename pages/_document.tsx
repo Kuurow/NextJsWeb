@@ -5,11 +5,14 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          {/* Anti-flash: hide the intro splash before first paint if already seen this session */}
+          {/* Before first paint: hide the intro splash if seen this session, and
+              flag Chromium/Blink (which composites large gradient layers poorly)
+              so the CSS can freeze the background animation there — Firefox keeps it. */}
           <script
             dangerouslySetInnerHTML={{
               __html:
-                "try{if(sessionStorage.getItem('kuurow:seen-intro'))document.documentElement.classList.add('intro-seen')}catch(e){}",
+                "try{if(sessionStorage.getItem('kuurow:seen-intro'))document.documentElement.classList.add('intro-seen')}catch(e){}" +
+                "try{if(navigator.userAgentData||(/Chrome|Chromium|CriOS/.test(navigator.userAgent)&&!/Firefox|FxiOS/.test(navigator.userAgent)))document.documentElement.classList.add('is-chromium')}catch(e){}",
             }}
           />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
