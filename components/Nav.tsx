@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Logo from './Logo';
 
 const NAV_LINKS = [
+    { label: 'Home', href: '/' },
     { label: 'Gallery', href: '/gallery' },
 ];
 
